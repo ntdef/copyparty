@@ -6,7 +6,7 @@ A Go implementation of the copyparty thumbnail generation system. This library p
 
 - **Hash-based caching system** - Uses SHA512 hashing for efficient thumbnail storage and retrieval
 - **EXIF orientation support** - Automatically rotates images based on EXIF data
-- **Multiple output formats** - JPEG, PNG (WebP support coming soon)
+- **Multiple output formats** - JPEG, PNG, and WebP
 - **Quality control** - Configurable quality settings (10-90)
 - **Flexible resizing** - Crop to fill or preserve aspect ratio
 - **Atomic file operations** - Thread-safe thumbnail generation
@@ -14,6 +14,23 @@ A Go implementation of the copyparty thumbnail generation system. This library p
 - **High-quality resampling** - Lanczos, Linear, and Box filters
 
 ## Installation
+
+### System Requirements
+
+For WebP support, you need libwebp installed on your system:
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install libwebp-dev
+
+# macOS
+brew install webp
+
+# Alpine Linux
+apk add libwebp-dev
+```
+
+### Go Module
 
 ```bash
 go get github.com/copyparty/thumbnail
@@ -96,7 +113,7 @@ gen := thumbnail.New(config)
 ```go
 thumbnail.FormatJPEG  // JPEG format
 thumbnail.FormatPNG   // PNG format
-thumbnail.FormatWebP  // WebP format (not yet implemented)
+thumbnail.FormatWebP  // WebP format (requires libwebp)
 ```
 
 ### Cropping Modes
@@ -195,7 +212,7 @@ This Go implementation mirrors the core functionality of copyparty's thumbnail s
 |---------|-------------------|-------------------|
 | Hash-based caching | ✅ SHA512 | ✅ SHA512 |
 | EXIF orientation | ✅ PIL/ExifTags | ✅ goexif |
-| Multiple formats | ✅ JPG, WebP, PNG | ✅ JPG, PNG (WebP planned) |
+| Multiple formats | ✅ JPG, WebP, PNG | ✅ JPG, WebP, PNG |
 | Quality settings | ✅ 10-90 | ✅ 10-90 |
 | Cropping modes | ✅ Crop/Fit | ✅ Crop/Fit |
 | Resampling | ✅ Lanczos (PIL) | ✅ Lanczos (imaging) |
@@ -234,10 +251,10 @@ This Go implementation mirrors the core functionality of copyparty's thumbnail s
 
 ## Limitations
 
-- WebP encoding not yet implemented (requires libwebp bindings)
 - Video thumbnail generation not supported
 - RAW image formats not supported
 - Audio waveform/spectrogram generation not supported
+- WebP encoding requires libwebp to be installed on the system
 
 These features may be added in future versions.
 
@@ -245,6 +262,7 @@ These features may be added in future versions.
 
 - `github.com/disintegration/imaging` - Image resizing and manipulation
 - `github.com/rwcarlsen/goexif` - EXIF data parsing
+- `github.com/chai2010/webp` - WebP encoding/decoding (requires libwebp)
 - `golang.org/x/image` - Extended image format support
 
 ## License

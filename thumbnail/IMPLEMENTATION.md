@@ -125,6 +125,7 @@ opts := &jpeg.Options{Quality: config.Quality}
 | EXIF orientation | ✅ | All 8 orientations supported |
 | JPEG output | ✅ | Quality 10-90 |
 | PNG output | ✅ | Compression support |
+| WebP output | ✅ | Requires libwebp system library |
 | Lanczos resampling | ✅ | High-quality filter |
 | Crop/Fit modes | ✅ | Fill or preserve aspect ratio |
 | Atomic writes | ✅ | Temp file + rename |
@@ -135,7 +136,6 @@ opts := &jpeg.Options{Quality: config.Quality}
 
 | Feature | Reason | Future Work |
 |---------|--------|-------------|
-| WebP encoding | Requires libwebp CGO bindings | Planned |
 | Video thumbnails | Requires FFmpeg bindings | Possible future addition |
 | RAW images | Complex decoder (rawpy/libraw) | Possible future addition |
 | Audio waveforms | FFmpeg dependency | Out of scope |
@@ -201,12 +201,12 @@ Both implementations produce nearly identical output:
 
 ### Feature Parity
 
-Core features: **~85% parity**
+Core features: **~90% parity**
 
 Not implemented:
 - Multiple decoder backends (vips, PIL, rawpy, FFmpeg)
 - Video/audio thumbnail generation
-- Format-specific optimizations (progressive JPEG in Go is default)
+- Some format-specific optimizations
 
 ## Usage Patterns
 

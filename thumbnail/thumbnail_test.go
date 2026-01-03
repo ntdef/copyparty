@@ -224,6 +224,7 @@ func TestOutputFormats(t *testing.T) {
 	}{
 		{FormatJPEG, ".jpg"},
 		{FormatPNG, ".png"},
+		{FormatWebP, ".webp"},
 	}
 
 	for _, tt := range formats {

@@ -8,8 +8,9 @@ import (
 	"image/png"
 	"os"
 
+	"github.com/chai2010/webp"
 	"github.com/disintegration/imaging"
-	"golang.org/x/image/webp"
+	golangwebp "golang.org/x/image/webp"
 )
 
 // Generator handles thumbnail generation
@@ -130,7 +131,7 @@ func (g *Generator) openImage(path string) (image.Image, error) {
 
 	// Try WebP
 	if format == "webp" {
-		img, err := webp.Decode(f)
+		img, err := golangwebp.Decode(f)
 		if err == nil {
 			return img, nil
 		}
@@ -197,11 +198,25 @@ func (g *Generator) encodeImage(img image.Image) ([]byte, error) {
 		}
 
 	case FormatWebP:
-		// For WebP, we use imaging library's encoding
-		// Note: Go's imaging library doesn't have native WebP encoding,
-		// so we fall back to JPEG for now
-		// In production, you'd use a library like libwebp bindings
-		return nil, fmt.Errorf("WebP encoding not yet implemented - use JPEG or PNG")
+		// WebP encoding using libwebp
+		// Map quality (10-90) to WebP quality (0-100)
+		// Python uses method 6 (slowest/best quality) for WebP
+		quality := float32(g.config.Quality)
+		if quality < 0 {
+			quality = 0
+		}
+		if quality > 100 {
+			quality = 100
+		}
+
+		// Encode to WebP
+		// Note: This requires libwebp to be installed on the system
+		if err := webp.Encode(buf, img, &webp.Options{
+			Lossless: false,
+			Quality:  quality,
+		}); err != nil {
+			return nil, fmt.Errorf("encode WebP (ensure libwebp is installed): %w", err)
+		}
 
 	default:
 		return nil, fmt.Errorf("unsupported format: %v", g.config.Format)
